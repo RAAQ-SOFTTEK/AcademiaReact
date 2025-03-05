@@ -1,5 +1,7 @@
-import firebaseAcademia from "./firebase";
+import firebaseAcademia from './firebase';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut} from "firebase/auth";
+import { signinUser } from '../config/authCalls';
+
 
 const auth = getAuth(firebaseAcademia);
 
