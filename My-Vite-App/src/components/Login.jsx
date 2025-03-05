@@ -12,9 +12,8 @@ export default function Login() {
     const navigate = useNavigate(); // Usa Navigate
 
     useEffect(() => {
-        if(user) console.log('/navbar')
-    }
-    , [user]);
+        if(user) navigate('/navbar'); // Redirige a /navbar si el usuario está autenticado
+    }, [user, navigate]);
 
     const changePassword = (e) => {
         setPassword(e.target.value);
@@ -24,8 +23,11 @@ export default function Login() {
         setUsername(e.target.value);
     };
 
-    const login = () => {
-        signIn(username, password); // Usa la función de inicio de sesión
+    const login = async () => {
+        const result = await signIn(username, password); // Usa la función de inicio de sesión
+        if (result) {
+            navigate('/navbar'); // Redirige a /navbar después de un inicio de sesión exitoso
+        }
     };
 
     return (
