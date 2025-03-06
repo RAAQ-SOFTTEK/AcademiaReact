@@ -28,10 +28,18 @@ export default function Navbar() {
     navigate('/login'); // Redirige a la página de login
   };
 
+  const hasAddPermission = (user) => {
+    return user.permission?.includes('add') || user['permissionadd']?.includes('add');
+  };
+
   const addTask = () => {
-    if (newTask.trim()) {
-      setTasks([...tasks, newTask]);
-      setNewTask('');
+    if (localUser && hasAddPermission(localUser)) { // Verifica si el usuario tiene el permiso de add
+      if (newTask.trim()) {
+        setTasks([...tasks, newTask]);
+        setNewTask('');
+      }
+    } else {
+      alert('No tienes permiso para agregar tareas.');
     }
   };
 
