@@ -2,15 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../host/useAuth';
 import { LogoutOutlined } from '@ant-design/icons';
 import { readDataFirestore } from '../config/firestoreCalls';
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate
-import { Input, Button, List } from 'antd'; // Importa componentes de Ant Design
+import { useNavigate } from 'react-router-dom';
+import { Input, Button, List, Card, Layout, Typography } from 'antd';
+
+const { Header, Content } = Layout;
+const { Title } = Typography;
 
 export default function Navbar() {
   const { logout, user } = useAuth();
   const [localUser, setLocalUser] = useState(null);
-  const [tasks, setTasks] = useState([]); // Estado para las tareas
-  const [newTask, setNewTask] = useState(''); // Estado para la nueva tarea
-  const navigate = useNavigate(); // Usa navigate
+  const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     readUser();
@@ -24,8 +27,8 @@ export default function Navbar() {
   };
 
   const handleLogout = async () => {
-    await logout(); // Llama a la función de logout
-    navigate('/login'); // Redirige a la página de login
+    await logout();
+    navigate('/login');
   };
 
   const hasAddPermission = (user) => {
@@ -33,7 +36,7 @@ export default function Navbar() {
   };
 
   const addTask = () => {
-    if (localUser && hasAddPermission(localUser)) { // Verifica si el usuario tiene el permiso de add
+    if (localUser && hasAddPermission(localUser)) {
       if (newTask.trim()) {
         setTasks([...tasks, newTask]);
         setNewTask('');
@@ -48,7 +51,7 @@ export default function Navbar() {
   };
 
   const removeTask = (index) => {
-    if (localUser && hasDeletePermission(localUser)) { // Verifica si el usuario tiene el permiso de delete
+    if (localUser && hasDeletePermission(localUser)) {
       const newTasks = tasks.filter((_, i) => i !== index);
       setTasks(newTasks);
     } else {
@@ -57,29 +60,36 @@ export default function Navbar() {
   };
 
   return (
-    <div style={{ textAlign: 'right' }}>
-      {localUser && <>{localUser.name}</>} <LogoutOutlined onClick={handleLogout} /> {/* Usa handleLogout */}
-      <div style={{ textAlign: 'left', marginTop: '20px' }}>
-        <Input
-          placeholder="Nueva tarea"
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-          style={{ width: '200px', marginRight: '10px' }}
-        />
-        <Button onClick={addTask}>Añadir</Button>
+    <Layout style={{ minHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+      <Header style={{ backgroundColor: '#001529', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        {localUser && <Title level={3} style={{ color: '#fff', margin: 0 }}>{localUser.name}</Title>}
+        <LogoutOutlined onClick={handleLogout} style={{ cursor: 'pointer', fontSize: '24px', marginRight: '20px' }} />
+      </Header>
+      <Content style={{ flex: 1, padding: '20px', backgroundColor: '#fff', display: 'flex', flexDirection: 'column' }}>
+        <Title level={2}>To-Do List</Title>
+        <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
+          <Input
+            placeholder="Nueva tarea"
+            value={newTask}
+            onChange={(e) => setNewTask(e.target.value)}
+            style={{ width: '200px', marginRight: '10px' }}
+          />
+          <Button type="primary" onClick={addTask}>Añadir</Button>
+        </div>
         <List
-          bordered
+          grid={{ gutter: 16, column: 1 }}
           dataSource={tasks}
           renderItem={(item, index) => (
-            <List.Item
-              actions={[<Button type="link" onClick={() => removeTask(index)}>Eliminar</Button>]}
-            >
-              {item}
+            <List.Item>
+              <Card
+                actions={[<Button type="link" onClick={() => removeTask(index)}>Eliminar</Button>]}
+              >
+                {item}
+              </Card>
             </List.Item>
           )}
-          style={{ marginTop: '20px' }}
         />
-      </div>
-    </div>
+      </Content>
+    </Layout>
   );
 }
