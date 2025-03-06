@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Button, Input, Row, Col, Layout, Typography } from "antd";
-import { signIn } from "../config/authCalls"; // Importa la función signIn
-import { useAuth } from "../host/useAuth"; // Importa el hook useAuth
-import { useNavigate } from "react-router-dom"; // Importa Navigate
+import { signIn } from "../config/authCalls";
+import { useAuth } from "../host/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
 export default function Login() {
-  const { user } = useAuth(); // Usa el hook useAuth
+  const { user } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // Usa Navigate
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) navigate('/navbar'); // Redirige a /navbar si el usuario está autenticado
+    if (user) navigate('/navbar');
   }, [user, navigate]);
 
   const changePassword = (e) => {
@@ -26,20 +26,20 @@ export default function Login() {
   };
 
   const login = async () => {
-    const result = await signIn(username, password); // Usa la función de inicio de sesión
+    const result = await signIn(username, password);
     if (result) {
-      navigate('/navbar'); // Redirige a /navbar después de un inicio de sesión exitoso
+      navigate('/navbar');
     }
   };
 
   return (
-    <Layout style={{ minHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
-      <Header style={{ backgroundColor: '#001529', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Title level={3} style={{ color: '#fff', margin: 0 }}>Iniciar Sesión</Title>
+    <Layout style={{ minHeight: '90vh', width: '27.5vw', display: 'flex', flexDirection: 'column' }}>
+      <Header style={{ backgroundColor: '#001529', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0, width: '100%' }}>
+        <Title level={3} style={{ color: '#fff', margin: 0, padding: '0 20px' }}>Iniciar Sesión</Title>
       </Header>
-      <Content style={{ flex: 1, padding: '20px', backgroundColor: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+      <Content style={{ flex: 1, backgroundColor: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 0, width: '100%' }}>
         <Title level={2}>Login</Title>
-        <div style={{ width: '300px' }}>
+        <div style={{ width: '100%', maxWidth: '400px' }}>
           <Row style={{ marginBottom: '10px' }}>
             <Col span={24}>
               <Input

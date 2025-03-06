@@ -62,7 +62,9 @@ export default function Navbar() {
   return (
     <Layout style={{ minHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
       <Header style={{ backgroundColor: '#001529', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        {localUser && <Title level={3} style={{ color: '#fff', margin: 0 }}>{localUser.name}</Title>}
+        <Title level={3} style={{ color: '#fff', margin: 0 }}>
+          {localUser ? localUser.name : 'Usuario'}
+        </Title>
         <LogoutOutlined onClick={handleLogout} style={{ cursor: 'pointer', fontSize: '24px', marginRight: '20px' }} />
       </Header>
       <Content style={{ flex: 1, padding: '20px', backgroundColor: '#fff', display: 'flex', flexDirection: 'column' }}>
@@ -72,7 +74,7 @@ export default function Navbar() {
             placeholder="Nueva tarea"
             value={newTask}
             onChange={(e) => setNewTask(e.target.value)}
-            style={{ width: '200px', marginRight: '10px' }}
+            style={{ width: '400px', marginRight: '10px' }}
           />
           <Button type="primary" onClick={addTask}>Añadir</Button>
         </div>
@@ -80,12 +82,22 @@ export default function Navbar() {
           grid={{ gutter: 16, column: 1 }}
           dataSource={tasks}
           renderItem={(item, index) => (
-            <List.Item>
-              <Card
-                actions={[<Button type="link" onClick={() => removeTask(index)}>Eliminar</Button>]}
-              >
+            <List.Item style={{ display: 'flex', alignItems: 'center' }}>
+              <Card style={{ flex: 1 }}>
                 {item}
               </Card>
+              <Button 
+                type="link" 
+                onClick={() => removeTask(index)} 
+                style={{ 
+                  marginLeft: '10px', 
+                  border: '1px solid red', 
+                  padding: '8px 16px', 
+                  lineHeight: '1.5' 
+                }}
+              >
+                Eliminar
+              </Button>
             </List.Item>
           )}
         />
@@ -93,4 +105,3 @@ export default function Navbar() {
     </Layout>
   );
 }
-
