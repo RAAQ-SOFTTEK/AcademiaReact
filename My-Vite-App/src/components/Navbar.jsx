@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../host/useAuth';
 import { LogoutOutlined } from '@ant-design/icons';
-import { readDataFirestore } from '../config/firestoreCalls';
+import { readDataFirestore, readAllDataFirestore, writeDataFirestore, deleteDataFirestore } from '../config/firestoreCalls';
 import { useNavigate } from 'react-router-dom';
 import { Input, Button, List, Card, Layout, Typography } from 'antd';
 
@@ -16,14 +16,24 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    readUser();
+    if (user) {
+      readUser();
+      readTasks();
+    }
   }, [user]);
 
   const readUser = async () => {
     const luser2 = await readDataFirestore('users', 'email', user.email);
     if (!luser2.empty) {
       setLocalUser(luser2.docs[0].data());
+    } else {
+      setLocalUser(null);
     }
+  };
+
+  const readTasks = async () => {
+    const tasksData = await readAllDataFirestore('tasks');
+    setTasks(tasksData.docs.map(doc => ({ id: doc.id, ...doc.data() })));
   };
 
   const handleLogout = async () => {
@@ -35,10 +45,12 @@ export default function Navbar() {
     return user.permission?.includes('add') || user['permissionadd']?.includes('add');
   };
 
-  const addTask = () => {
+  const addTask = async () => {
     if (localUser && hasAddPermission(localUser)) {
       if (newTask.trim()) {
-        setTasks([...tasks, newTask]);
+        const newTaskData = { text: newTask, createdBy: user.email, createdAt: new Date().toLocaleString() };
+        const docRef = await writeDataFirestore('tasks', newTaskData);
+        setTasks([...tasks, { id: docRef.id, ...newTaskData }]);
         setNewTask('');
       }
     } else {
@@ -50,10 +62,10 @@ export default function Navbar() {
     return user.permission?.includes('delete') || user['permissiondelete']?.includes('delete');
   };
 
-  const removeTask = (index) => {
+  const removeTask = async (taskId) => {
     if (localUser && hasDeletePermission(localUser)) {
-      const newTasks = tasks.filter((_, i) => i !== index);
-      setTasks(newTasks);
+      await deleteDataFirestore('tasks', taskId);
+      setTasks(tasks.filter(task => task.id !== taskId));
     } else {
       alert('No tienes permiso para eliminar tareas.');
     }
@@ -81,14 +93,18 @@ export default function Navbar() {
         <List
           grid={{ gutter: 16, column: 1 }}
           dataSource={tasks}
-          renderItem={(item, index) => (
-            <List.Item style={{ display: 'flex', alignItems: 'center' }}>
-              <Card style={{ flex: 1 }}>
-                {item}
+          renderItem={(item) => (
+            <List.Item style={{ display: 'flex', alignItems: 'center', margin: '0' }}>
+              <Card style={{ flex: 1, margin: '0' }}>
+                <div className="ant-card-body" style={{ padding: '5px' }}>
+                  <p>{item.text}</p>
+                  <p style={{ fontSize: '12px', color: 'gray' }}>Creado por: {item.createdBy}</p>
+                  <p style={{ fontSize: '12px', color: 'gray' }}>Fecha y hora: {item.createdAt}</p>
+                </div>
               </Card>
               <Button 
                 type="link" 
-                onClick={() => removeTask(index)} 
+                onClick={() => removeTask(item.id)} 
                 style={{ 
                   marginLeft: '10px', 
                   border: '1px solid red', 
