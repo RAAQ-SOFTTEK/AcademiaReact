@@ -72,7 +72,7 @@ export default function Navbar() {
   };
 
   return (
-    <Layout style={{ minHeight: '90vh', maxWidth: '60vh' ,display: 'flex', flexDirection: 'column' }}>
+    <Layout style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', maxWidth: '100%', padding: '0 20px' }}>
       <Header style={{ backgroundColor: '#001529', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Title level={3} style={{ color: '#fff', margin: 0 }}>
           {localUser ? localUser.name : 'Usuario'}
@@ -81,14 +81,14 @@ export default function Navbar() {
       </Header>
       <Content style={{ flex: 1, padding: '20px', backgroundColor: '#fff', display: 'flex', flexDirection: 'column' }}>
         <Title level={2}>To-Do List</Title>
-        <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
+        <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
           <Input
             placeholder="Nueva tarea"
             value={newTask}
             onChange={(e) => setNewTask(e.target.value)}
-            style={{ width: '400px', marginRight: '10px' }}
+            style={{ flex: '1 1 300px', marginRight: '10px', marginBottom: '10px' }}
           />
-          <Button type="primary" onClick={addTask}>Añadir</Button>
+          <Button type="primary" onClick={addTask} style={{ flex: '0 0 auto' }}>Añadir</Button>
         </div>
         <List
           grid={{ gutter: 16, column: 1 }}

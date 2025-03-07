@@ -33,11 +33,11 @@ export default function Login() {
   };
 
   return (
-    <Layout style={{ minHeight: '90vh', width: '27.5vw', display: 'flex', flexDirection: 'column' }}>
-      <Header style={{ backgroundColor: '#001529', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0, width: '100%' }}>
-        <Title level={3} style={{ color: '#fff', margin: 0, padding: '0 20px' }}>Iniciar Sesión</Title>
+    <Layout style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', maxWidth: '100%', padding: '0 20px' }}>
+      <Header style={{ backgroundColor: '#001529', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 20px', width: '100%' }}>
+        <Title level={3} style={{ color: '#fff', margin: 0 }}>Iniciar Sesión</Title>
       </Header>
-      <Content style={{ flex: 1, backgroundColor: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 0, width: '100%' }}>
+      <Content style={{ flex: 1, backgroundColor: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '20px', width: '100%' }}>
         <Title level={2}>Login</Title>
         <div style={{ width: '100%', maxWidth: '400px' }}>
           <Row style={{ marginBottom: '10px' }}>
