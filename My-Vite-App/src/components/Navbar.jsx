@@ -72,7 +72,7 @@ export default function Navbar() {
   };
 
   return (
-    <Layout style={{ minHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+    <Layout style={{ minHeight: '90vh', maxWidth: '60vh' ,display: 'flex', flexDirection: 'column' }}>
       <Header style={{ backgroundColor: '#001529', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Title level={3} style={{ color: '#fff', margin: 0 }}>
           {localUser ? localUser.name : 'Usuario'}
